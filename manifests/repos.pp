@@ -2,6 +2,7 @@
 
 class kubernetes::repos (
   String $container_runtime = $kubernetes::container_runtime,
+  Optional[Boolean] $manage_container_runtime = $kubernetes::manage_container_runtime,
 ){
 
   case $::osfamily  {
@@ -16,7 +17,7 @@ class kubernetes::repos (
           },
         }
 
-        if $container_runtime == 'docker' {
+        if $container_runtime == 'docker' and $manage_container_runtime {
           apt::source { 'docker':
             location => 'https://apt.dockerproject.org/repo',
             repos    => 'main',
@@ -29,7 +30,7 @@ class kubernetes::repos (
       }
     }
     'RedHat': {
-      if $container_runtime == 'docker' {
+      if $container_runtime == 'docker' and $manage_container_runtime {
         yumrepo { 'docker':
           descr    => 'docker',
           baseurl  => 'https://yum.dockerproject.org/repo/main/centos/7',

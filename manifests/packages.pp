@@ -9,6 +9,7 @@ class kubernetes::packages (
   Boolean $package_pin                         = $kubernetes::package_pin,
   String $cni_package_name                     = $kubernetes::cni_package_name,
   String $cni_version                          = $kubernetes::cni_version,
+  Optional[Boolean] $manage_container_runtime  = $kubernetes::manage_container_runtime,
 ) {
 
   $kube_packages = ['kubelet', 'kubectl']
@@ -24,7 +25,7 @@ class kubernetes::packages (
     }
   }
 
-  if $container_runtime == 'docker' {
+  if $container_runtime == 'docker' and $manage_container_runtime {
     if $package_pin {
       if $::osfamily == 'Debian' {
         include apt

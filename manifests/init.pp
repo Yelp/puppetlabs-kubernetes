@@ -321,6 +321,7 @@ class kubernetes (
   String $kube_dns_ip                                              = $kubernetes::params::kube_dns_ip,
   String $kube_api_service_ip                                      = $kubernetes::params::kube_api_service_ip,
   String $kube_proxy_version                                       = $kubernetes::params::kube_proxy_version,
+  Optional[Boolean] $manage_container_runtime                      = $kubernetes::params::manage_container_runtime,
 
   )  inherits kubernetes::params {
 

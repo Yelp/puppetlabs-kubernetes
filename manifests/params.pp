@@ -74,5 +74,6 @@ $node_label = $::hostname
 $cluster_service_cidr = undef
 $kube_api_service_ip = undef
 $kube_dns_ip = undef
+$manage_container_runtime = true
 
 }

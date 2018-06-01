@@ -7,6 +7,7 @@ class kubernetes::service (
   String $container_runtime          = $kubernetes::container_runtime,
   String $kube_dns_ip                = $kubernetes::kube_dns_ip,
   Optional[String] $etcd_ip          = $kubernetes::etcd_ip,
+  Optional[Boolean] $manage_container_runtime = $kubernetes::manage_container_runtime,
 ){
 
   $peeruls = inline_template("'{\"peerURLs\":[\"http://${etcd_ip}:2380\"]}'")
@@ -33,9 +34,13 @@ class kubernetes::service (
 
   case $container_runtime {
     'docker': {
-      service { 'docker':
-        ensure => running,
-        enable => true,
+      if $manage_container_runtime {
+        service { 'docker':
+          ensure => running,
+          enable => true,
+        }
+      } else {
+        require Service['docker']
       }
 
       service {'kubelet':
