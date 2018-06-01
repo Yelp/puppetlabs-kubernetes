@@ -39,8 +39,6 @@ class kubernetes::service (
           ensure => running,
           enable => true,
         }
-      } else {
-        require Service['docker']
       }
 
       service {'kubelet':
