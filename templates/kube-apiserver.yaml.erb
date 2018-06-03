@@ -65,10 +65,10 @@ spec:
     ports:
       - name: https
         containerPort: 6443
-	hostPort: 6443
+        hostPort: 6443
       - name: local
         containerPort: 8080
-	hostPort: 8080
+        hostPort: 8080
     volumeMounts:
     - mountPath: /etc/kubernetes/
       name: k8s
