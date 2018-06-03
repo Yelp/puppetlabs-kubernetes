@@ -34,7 +34,7 @@ spec:
     - --requestheader-extra-headers-prefix=X-Remote-Extra-
     - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
     - --service-account-key-file=/etc/kubernetes/pki/sa.pub
-    - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
+    - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,DefaultTolerationSeconds
     - --requestheader-username-headers=X-Remote-User
     - --requestheader-allowed-names=front-proxy-client
     <%- if @kubernetes_version =~ /1[.](8|9)[.]\d/ -%>
@@ -54,14 +54,21 @@ spec:
       httpGet:
         host: 127.0.0.1
         path: /healthz
-        port: 6443
-        scheme: HTTPS
+        port: 8080
+        scheme: HTTP
       initialDelaySeconds: 15
       timeoutSeconds: 15
     name: kube-apiserver
     resources:
       requests:
         cpu: 250m
+    ports:
+      - name: https
+        containerPort: 6443
+	hostPort: 6443
+      - name: local
+        containerPort: 8080
+	hostPort: 8080
     volumeMounts:
     - mountPath: /etc/kubernetes/
       name: k8s
